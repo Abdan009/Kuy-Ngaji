@@ -27,13 +27,7 @@ class _MainPageState extends State<MainPage> {
               icon: Icon(FontAwesomeIcons.quran), label: "Al-Qur'an"),
         ],
       ),
-      body: (currentIndex == 0)
-          ? ScheduleShalat()
-          : Center(
-              child: Container(
-                child: Text('Al-Quran'),
-              ),
-            ),
+      body: (currentIndex == 0) ? ScheduleShalat() : AlquranPage(),
     );
   }
 }
