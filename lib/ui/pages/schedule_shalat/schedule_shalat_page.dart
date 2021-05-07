@@ -6,6 +6,29 @@ class ScheduleShalat extends StatefulWidget {
 }
 
 class _ScheduleShalatState extends State<ScheduleShalat> {
+
+
+  // CurrentPray _currentPray;
+  // static BaseOptions options = new BaseOptions(
+  //   connectTimeout: 5000,
+  //   receiveTimeout: 3000,
+  // );
+
+  CurrentPray _currentPray;
+  static BaseOptions options=new BaseOptions(
+    connectTimeout: 3000,
+    receiveTimeout: 5000
+  );
+
+
+  @override
+  void initState() {
+    // getCurrentPray(city: "Indramayu",country: "id");
+    getCurrencyPray(city: "Indramayu",country: "id");
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +107,7 @@ class _ScheduleShalatState extends State<ScheduleShalat> {
                   height: 100,
                 ),
                 Container(
-                  height: 300,
+                  height: 350,
                   width: Get.width - 2 * 20,
                   decoration: BoxDecoration(
                       color: Colors.white,
@@ -114,18 +137,25 @@ class _ScheduleShalatState extends State<ScheduleShalat> {
                             ),
                           ),
                           subtitle: Text(
-                            '9 september 2016 / 8 Dzulhizah 1437',
+                            // '9 september 2016 / 8 Dzulhizah 1437'
+                           _currentPray==null ? "": "${DateFormat("dd MMMM yyyy",'id').format(
+                                DateTime(int.parse(_currentPray.data.date.gregorian.year),
+                                    _currentPray.data.date.gregorian.month.number,
+                                  int.parse(_currentPray.data.date.gregorian.day)
+                                ))}"
+                            ,
                             style: TextStyle(
                               fontSize: 15,
                               color: Colors.black,
                             ),
                           ),
                         ),
-                        Container(
+                        _currentPray==null ? Container():    Container(
                           margin: EdgeInsets.symmetric(horizontal: 10),
-                          height: 200,
+                          height: 250,
                           // color: Colors.amber,
                           child: ListView.builder(
+                            physics: ClampingScrollPhysics(),
                             itemCount: mockSceduleShalat.length,
                             itemBuilder: (_, index) => Container(
                               child: Column(
@@ -143,8 +173,22 @@ class _ScheduleShalatState extends State<ScheduleShalat> {
                                           ),
                                         ),
                                         Text(
-                                          mockSceduleShalat[index].jam +
-                                              '  WIB',
+                                         // index==0 ? _currentPray.data.timings.imsak+'  WIB' :
+                                         // index==1 ? _currentPray.data.timings.fajr +'  WIB':
+                                         // index==2 ? _currentPray.data.timings.sunrise +'  WIB':
+                                         // index==3 ? _currentPray.data.timings.dhuhr +'  WIB':
+                                         // index==4 ? _currentPray.data.timings.asr+'  WIB':
+                                         // index==5 ? _currentPray.data.timings.maghrib+'  WIB':
+                                         // _currentPray.data.timings.isha+'  WIB'
+
+                                          index==0 ? _currentPray.data.timings.imsak + ' WIB' :
+                                              index==1 ? _currentPray.data.timings.fajr + ' WIB' :
+                                                  index==2 ? _currentPray.data.timings.sunrise + ' WIB' :
+                                                      index==3 ? _currentPray.data.timings.dhuhr + ' WIB' :
+                                                          index==4 ? "${_currentPray.data.timings.asr} WIB" :
+                                                              index==5 ? _currentPray.data.timings.maghrib + ' WIB' :
+                                                                  _currentPray.data.timings.isha + " WIB"
+                                              ,
                                           style: TextStyle(
                                             fontSize: 18,
                                             color: Colors.black,
@@ -171,4 +215,65 @@ class _ScheduleShalatState extends State<ScheduleShalat> {
       ),
     );
   }
+
+
+  // Future<CurrentPray> getCurrentPray({String country,String city})async{
+  //   try{
+  //     Dio dio = new Dio(options);
+  //     d.Response response;
+  //     String url = "http://api.aladhan.com/v1/timingsByCity";
+  //     response = await dio.get(url, queryParameters: {
+  //       "city" : "$city",
+  //       "country" : "$country",
+  //       "method" : "5"
+  //     });
+  //     if(response.statusCode==200){
+  //
+  //       setState(() {
+  //         _currentPray= CurrentPray.fromJson(response.data);
+  //       });
+  //       print(response.data);
+  //
+  //     }
+  //
+  //
+  //
+  //
+  //   }on DioError catch(e){
+  //     print(e.message);
+  //   }
+  //   return _currentPray;
+  //
+  //
+  // }
+
+
+  Future<CurrentPray> getCurrencyPray({String city,String country})async{
+    try{
+      Dio dio=new Dio(options);
+      d.Response response=await dio.get("http://api.aladhan.com/v1/timingsByCity",
+      queryParameters: {
+       "city" : "$city",
+        "country" : "$country",
+        "method" : "5"
+      });
+
+      if(response.statusCode==200){
+        print(response.data);
+        setState(() {
+          _currentPray=CurrentPray.fromJson(response.data);
+        });
+
+      }
+
+      return _currentPray;
+    }on DioError catch(e){
+      print(e);
+      return null;
+    }
+
+  }
+
+
+
 }

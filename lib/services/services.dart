@@ -1,0 +1,1 @@
+part 'service_current_pray.dart';

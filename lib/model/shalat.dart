@@ -16,6 +16,18 @@ class ScheduleShalat {
 List<ScheduleShalat> mockSceduleShalat = [
   ScheduleShalat(
     id: '1',
+    nama: 'Imsak',
+    jam: '04.25',
+    tanggal: DateTime.utc(2021, 5, 3),
+  ),
+  ScheduleShalat(
+    id: '1',
+    nama: 'Fajar',
+    jam: '04.25',
+    tanggal: DateTime.utc(2021, 5, 3),
+  ),
+  ScheduleShalat(
+    id: '1',
     nama: 'Shubuh',
     jam: '04.25',
     tanggal: DateTime.utc(2021, 5, 3),

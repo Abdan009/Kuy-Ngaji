@@ -2,10 +2,12 @@ part of 'widgets.dart';
 
 class CardListWidget extends StatelessWidget {
   final String nomor, title, subTitle;
+  final bool detailSurah;
+  var bismillah = "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ";
   CardListWidget({
     @required this.nomor,
     @required this.title,
-    this.subTitle,
+    this.subTitle, this.detailSurah=false,
   });
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,7 @@ class CardListWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
+             if(!title.contains(bismillah))   Container(
                   height: 30,
                   width: 30,
                   margin: EdgeInsets.only(right: 10),
@@ -37,8 +39,8 @@ class CardListWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Container(
-                          child: Text(
-                            title,
+                          child:Text(
+                            title.replaceAll(bismillah, ""),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18),
                             textAlign: TextAlign.end,
@@ -50,7 +52,7 @@ class CardListWidget extends StatelessWidget {
                           ),
                         if (subTitle != null)
                           Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: detailSurah && nomor==1 ?Alignment.center :Alignment.centerLeft,
                             child: Text(
                               subTitle,
                               textAlign: TextAlign.left,

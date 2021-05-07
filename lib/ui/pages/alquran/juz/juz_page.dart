@@ -7,9 +7,11 @@ class JuzPage extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: ListView.builder(
           itemCount: mockJuz.length,
-          itemBuilder: (_, index) => GestureDetector(
+          itemBuilder: (_, index) => InkWell(
                 onTap: () {
-                  Get.to(DetailJuz(mockJuz[index]));
+                  Get.to(DetailSurahPage(nama: "Juz "+mockJuz[index].nomorJuz,
+                  nomor: mockJuz[index].nomorJuz,
+                  isSurah: false,));
                 },
                 child: Container(
                   child: Column(
